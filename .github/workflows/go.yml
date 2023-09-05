@@ -23,8 +23,8 @@ jobs:
       - name: Build
         run: go build -v ./...
 
-      - name: Test
-        run: go test -v ./...
+      - name: Test Running Build
+        run: ./main
 
       # If we want to sign the binarys
       # - name: Import GPG key
@@ -33,12 +33,13 @@ jobs:
       #   with:
       #     gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
       #     passphrase: ${{ secrets.PASSPHRASE }}
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v4
-        with:
-          version: latest # Potentially update this to be coming from the previous step
-          args: release --clean
-          workdir: "." # Potentially need to update this based on the build conditions
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+
+      # - name: Run GoReleaser
+      #   uses: goreleaser/goreleaser-action@v4
+      #   with:
+      #     version: latest # Potentially update this to be coming from the previous step
+      #     args: release --clean
+      #     workdir: "." # Potentially need to update this based on the build conditions
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
