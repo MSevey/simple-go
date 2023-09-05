@@ -48,7 +48,7 @@ jobs:
       - run: git fetch --force --tags
       - uses: actions/setup-go@v4
         with:
-          go-version: latest
+          go-version: stable
       # Import the GPG key from github secrets to sign the binaries
       - name: Import GPG key
         id: import_gpg
