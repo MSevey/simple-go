@@ -5,24 +5,40 @@ name: Go
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.20'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
 
-    - name: Build
-      run: go build -v ./...
+      - name: Build
+        run: go build -v ./...
 
-    - name: Test
-      run: go test -v ./...
+      - name: Test
+        run: go test -v ./...
+
+      # If we want to sign the binarys
+      # - name: Import GPG key
+      #   id: import_gpg
+      #   uses: crazy-max/ghaction-import-gpg@v5
+      #   with:
+      #     gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+      #     passphrase: ${{ secrets.PASSPHRASE }}
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          version: latest # Potentially update this to be coming from the previous step
+          args: release --clean
+          workdir: "." # Potentially need to update this based on the build conditions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
