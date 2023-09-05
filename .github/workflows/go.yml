@@ -27,7 +27,7 @@ jobs:
         run: ls
 
       - name: Test Running Build
-        run: ./main
+        run: ./simple-go
 
       # If we want to sign the binarys
       # - name: Import GPG key
